@@ -1,86 +1,28 @@
-"""
-Estrutura Peça:
+from PartsControl import PartsControl
+from Util import switch
 
-codigo (numérico int) //nao pode ser negativo
-nome (string)
-categoria (int) //valor entre 1 e 20
-preco (numérico float) //nao pode ser negativo
-quantid (numérico int) //nao pode ser negativo
-"""
+Parts = PartsControl()
 
+while True:
+    print("1 - List")
+    print("2 - Register")
+    print("3 - Remove")
+    print("4 - Edit")
+    print("5 - Sell")
+    print("6 - Sales Report")
+    print("7 - Export")
+    print("8 - Upload File")
+    print("0 - Exit")
+    option = int(input("Choose an option: "))
 
-class Peca:
-    def __init__(self, codigo, nome, categoria, preco, qtd):
-        self.codigo = codigo  # int
-        self.nome = nome  # str
-        self.categoria = categoria  # int (1 - 20)
-        self.preco = preco  # float > 0
-        self.qtd = qtd  # int > 0
+    if option < 1:
+        break
 
+    switch(option, Parts)
 
-class Menu:
-    def __init__(self, secoes):
-        self.secoes = secoes
-
-    def mostrar(self):
-        for i, secao in enumerate(self.secoes):
-            print(i, "-", secao.nome)
-        userInput = int(input("Escolha uma opção: "))
-
-        secaoEscolhida = self.secoes[userInput]
-
-        for i, secao in enumerate(secaoEscolhida.opcoes):
-            print(i, "-", secao.nome)
-
-        userInput = int(input("Escolha uma opção: "))
-        secaoEscolhida = secaoEscolhida.opcoes[userInput]
-        secaoEscolhida.callback()
-
-
-class Navegacao:
-    def __init__(self, nome, opcoes, callback: callable = ''):
-        self.nome = nome
-        self.opcoes = opcoes
-        self.callback = callback
-
-
-def mostrarTodasPecas():
-    print("hehe")
-
-
-sec = [
-    Navegacao('Mostrar Peças', [
-        Navegacao("Tudo", [], mostrarTodasPecas),
-        Navegacao("Filtro", [])
-    ]),
-    Navegacao('Nova Peça', []),
-    Navegacao('Remover Peça', [
-        Navegacao("Por código", []),
-        Navegacao("Por nome", []),
-        Navegacao("Por categoria", [])
-    ]),
-    Navegacao('Editar Peça', [
-        Navegacao("Por código", []),
-        Navegacao("Por nome", [])
-    ]),
-    Navegacao('Vender Peça', [
-        Navegacao("Por código", []),
-        Navegacao("Por nome", [])
-    ]),
-]
-
-teste = Menu(sec)
-teste.mostrar()
 
 """
 Opções:
-
-1. 
-mostrar cadastro
-    mostrar todo cadastro
-    mostrar a partir de filtro em campo numérico
-        para isto, escolher qual campo numérico (preço por ex.) e definir em seguida os limites inferior e superior. 
-        Ex.: mostrar todas peças com preço >= a 45.50 e preço <= a 90.00
 
 2. inserir nova peça no cadastro
 obs.: deve verificar se já não há peça cadastrada com mesmo código e/ou nome; se já houver, 
