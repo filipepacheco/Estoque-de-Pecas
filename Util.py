@@ -1,8 +1,9 @@
-def switch(option, parts):
+
+def menu(option, parts):
     clearConsole()
 
     if option == 1:
-        parts.listParts(),
+        parts.listParts()
     elif option == 2:
         parts.register()
     elif option == 3:

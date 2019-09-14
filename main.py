@@ -1,7 +1,8 @@
 from PartsControl import PartsControl
-from Util import switch
+from Util import menu
 
 Parts = PartsControl()
+
 
 while True:
     print("1 - List")
@@ -18,27 +19,11 @@ while True:
     if option < 1:
         break
 
-    switch(option, Parts)
+    menu(option, Parts)
 
 
 """
 Opções:
-
-2. inserir nova peça no cadastro
-obs.: deve verificar se já não há peça cadastrada com mesmo código e/ou nome; se já houver, 
-gera mensagem de erro e não insere esta peça.
-
-3. remover peça 
-nesta opção primeira ação é o usuário escolher o critério de remoção:
-  pelo código
-  pelo nome
-  pela categoria (remove todas peças desta categoria)
-
-4. editar peça
-escolher o critério de seleção:
-  pelo código
-  pelo nome
-deve permitir a modificação (atualização) dos campos deste item
 
 5. vender peça
 identificar a peça (pelo código ou nome)

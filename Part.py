@@ -11,34 +11,37 @@ quantid (numérico int) //nao pode ser negativo
 
 
 class Part:
+
     def __init__(self, id, name, category, price, amount, control=None):
-        assert (is_int(id)), "CODE TYPE EXPECTED <class 'int'>, VALUE RECEIVED: %r" % id
-        id = int(id)
-        assert (id > 0), "CODE MUST BE > 0, RECEIVED: %r" % id
-        if control is not None:
-            assert (id not in control.partsIds), "ID %r ALREADY EXISTS!" % id
-
-        assert (type(name) is str), "NAME TYPE EXPECTED: <class 'str'>, RECEIVED: %r" % name
-        if control is not None:
-            assert (name not in control.partsNames), "NAME %r ALREADY EXISTS!" % name
-
-        assert (is_int(category)), "CATEGORY TYPE EXPECTED: <class 'int'>, RECEIVED: %r" % category
-        category = int(category)
-        assert (category in list(range(1, 11))), "CATEGORY MUST BE BETWEEN 1 - 10, RECEIVED: %r" % category
-
-        assert (is_float(price)), "PRICE TYPE EXPECTED: <class 'float'>, RECEIVED: %r" % price
-        price = float(price)
-        assert (price > 0), "PRICE MUST BE > 0, RECEIVED: %r" % price
-
-        assert (is_int(amount)), "AMOUNT TYPE EXPECTED: <class 'int'>, RECEIVED: %r" % amount
-        amount = int(amount)
-        assert (amount > 0), "AMOUNT MUST BE > 0, RECEIVED: %r" % amount
-
         self.id = id
         self.name = name
         self.category = category
         self.price = price
         self.amount = amount
+        self.validatePart(control)
+
+    def validatePart(self, control=None, edit=False):
+        assert (is_int(self.id)), "CODE TYPE EXPECTED <class 'int'>, VALUE RECEIVED: %r" % self.id
+        id = int(self.id)
+        assert (id > 0), "CODE MUST BE > 0, RECEIVED: %r" % id
+        if control is not None:
+            assert (id not in control.partsIds), "ID %r ALREADY EXISTS!" % id
+
+        assert (type(self.name) is str), "NAME TYPE EXPECTED: <class 'str'>, RECEIVED: %r" % self.name
+        if control is not None:
+            assert (self.name not in control.partsNames), "NAME %r ALREADY EXISTS!" % self.name
+
+        assert (is_int(self.category)), "CATEGORY TYPE EXPECTED: <class 'int'>, RECEIVED: %r" % self.category
+        category = int(self.category)
+        assert (category in list(range(1, 21))), "CATEGORY MUST BE BETWEEN 1 - 20, RECEIVED: %r" % category
+
+        assert (is_float(self.price)), "PRICE TYPE EXPECTED: <class 'float'>, RECEIVED: %r" % self.price
+        price = float(self.price)
+        assert (price > 0), "PRICE MUST BE > 0, RECEIVED: %r" % price
+
+        assert (is_int(self.amount)), "AMOUNT TYPE EXPECTED: <class 'int'>, RECEIVED: %r" % self.amount
+        amount = int(self.amount)
+        assert (amount > 0), "AMOUNT MUST BE > 0, RECEIVED: %r" % amount
 
     def print(self):
         print("-------------------------------")
