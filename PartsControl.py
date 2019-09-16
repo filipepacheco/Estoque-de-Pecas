@@ -1,6 +1,8 @@
 # coding=utf-8
 from Part import Part
-from Util import is_int, clearConsole
+from Util import clearConsole
+from copy import copy
+from Sell import Sell
 
 
 class PartsControl:
@@ -8,6 +10,7 @@ class PartsControl:
         self.parts = parts
         self.partsIds = []
         self.partsNames = []
+        self.sellings = []
         for part in parts:
             self.partsIds.append(part.id)
             self.partsNames.append(part.name)
@@ -22,7 +25,10 @@ class PartsControl:
     def listParts(self):
         print("1 - List all")
         print("2 - Filter by numeric field")
+        print("0 - Return to menu")
         option = int(input("Choose and option: "))
+        if option == 0:
+            return True
         clearConsole()
 
         condition = ""
@@ -36,7 +42,7 @@ class PartsControl:
                 if arg1 != "":
                     arg2 = input("Second Argument (OPTIONAL): ")
 
-        parts = self.filterPartsByCondtion(condition, arg1, arg2)
+        parts = self.getPartsByCondtion(condition, arg1, arg2)
 
         if not parts:
             print("0 parts found.")
@@ -44,7 +50,7 @@ class PartsControl:
             for part in parts:
                 part.print()
 
-    def filterPartsByCondtion(self, condition="", arg1="", arg2=""):
+    def getPartsByCondtion(self, condition="", arg1="", arg2=""):
         parts = []
 
         if len(self.parts) == 0:
@@ -60,9 +66,8 @@ class PartsControl:
                     if getattr(part, condition, -1) == arg1:
                         parts.append(part)
                 else:
-                    if getattr(part, condition, -1) in range(int(arg1), int(arg2)):
+                    if int(getattr(part, condition, -1)) in range(int(arg1), int(arg2) + 1):
                         parts.append(part)
-
         return parts
 
     def getPartIndexes(self, condition, arg):
@@ -110,8 +115,10 @@ class PartsControl:
 
     def remove(self):
         try:
-            print("Remove by...\n- id\n- name\n- category")
+            print("Remove by...\n- id\n- name\n- category\n(Enter 0 to exit)")
             condition = input("\nType a condition: ")
+            if condition == '0':
+                return True
             arg = input("First Argument: ")
 
             indexes = self.getPartIndexes(condition, arg)
@@ -136,7 +143,9 @@ class PartsControl:
     def edit(self):
         try:
             print("Edit by...\n- id\n- name")
-            condition = input("\nType a condition: ")
+            condition = input("\nType a condition (Enter 0 to exit): ")
+            if condition == '0':
+                return True
             arg = input("First Argument: ")
 
             index = self.getPartIndexes(condition, arg)
@@ -147,26 +156,59 @@ class PartsControl:
             while True:
                 self.parts[index].print()
                 prop = input("What do you want to edit? (Enter 0 to exit) ")
-                if prop == 0:
+                if prop == '0':
                     break
                 if prop not in self.parts[0].__dict__.keys():
                     print("ATTRIBUTE %r DOESNT EXISTS!" % condition)
                     continue
 
                 newValue = input("New value: ")
-                newPart = self.parts[index].copy()
-                setattr(newPart, prop, newValue)
-                self.parts[index].validatePart()
-
+                self.editPart(index, prop, newValue)
         except (AssertionError, ValueError) as Error:
             print("UNABLE TO EDIT NEW PART.\nERROR:", Error)
         else:
             print("PART SUCCESSFULLY EDITED.")
 
+    def editPart(self, index, prop, newValue):
+        newPart = copy(self.parts[index])
+        setattr(newPart, prop, newValue)
+        validateEdit = False
+        if prop == 'id' or prop == 'name':
+            validateEdit = True
+        newPart.validatePart(self, validateEdit)
+        self.parts[index] = newPart
+        self.partsNames[index] = newPart.name
+        self.partsIds[index] = newPart.id
 
-    # def sell(self):
-    #
-    # def report(self):
+    """
+    5. vender peça
+    identificar a peça (pelo código ou nome)
+    solicitar pelo teclado a quantidade vendida (não permitir estoque negativo)
+    atualizar campo quantid da peça vendida
+    """
+    def sell(self):
+        try:
+            print("Sell by...\n- id\n- name")
+            condition = input("\nType a condition (Enter 0 to exit): ")
+            if condition == '0':
+                return True
+
+            index = self.getPartIndexes(condition, input("First Argument: "))
+            assert (len(index) > 0), "PART NOT FOUND!"
+
+            index = index[0]
+            self.parts[index].print()
+            newAmount = input("How much you want to sell? ")
+            self.editPart(index, "amount", self.parts[index].amount - newAmount)
+        except (AssertionError, ValueError, AttributeError) as Error:
+            print("UNABLE TO SELL NEW PART.\nERROR:", Error)
+        else:
+            print("PART SUCCESSFULLY SOLD!")
+            self.sellings.append(Sell(self.parts[index].id, self.parts[index].price, newAmount))
+            self.parts[index].print()
+
+
+        # def report(self):
     #
     # def export(self):
     #

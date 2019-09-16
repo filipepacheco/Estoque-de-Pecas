@@ -21,15 +21,17 @@ class Part:
         self.validatePart(control)
 
     def validatePart(self, control=None, edit=False):
-        assert (is_int(self.id)), "CODE TYPE EXPECTED <class 'int'>, VALUE RECEIVED: %r" % self.id
-        id = int(self.id)
-        assert (id > 0), "CODE MUST BE > 0, RECEIVED: %r" % id
-        if control is not None:
-            assert (id not in control.partsIds), "ID %r ALREADY EXISTS!" % id
 
-        assert (type(self.name) is str), "NAME TYPE EXPECTED: <class 'str'>, RECEIVED: %r" % self.name
-        if control is not None:
-            assert (self.name not in control.partsNames), "NAME %r ALREADY EXISTS!" % self.name
+        if edit:
+            assert (is_int(self.id)), "CODE TYPE EXPECTED <class 'int'>, VALUE RECEIVED: %r" % self.id
+            id = int(self.id)
+            assert (id > 0), "CODE MUST BE > 0, RECEIVED: %r" % id
+            if control is not None:
+                assert (id not in control.partsIds), "ID %r ALREADY EXISTS!" % id
+
+            assert (type(self.name) is str), "NAME TYPE EXPECTED: <class 'str'>, RECEIVED: %r" % self.name
+            if control is not None:
+                assert (self.name not in control.partsNames), "NAME %r ALREADY EXISTS!" % self.name
 
         assert (is_int(self.category)), "CATEGORY TYPE EXPECTED: <class 'int'>, RECEIVED: %r" % self.category
         category = int(self.category)

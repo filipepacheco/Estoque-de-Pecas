@@ -25,11 +25,6 @@ while True:
 """
 Opções:
 
-5. vender peça
-identificar a peça (pelo código ou nome)
-solicitar pelo teclado a quantidade vendida (não permitir estoque negativo)
-atualizar campo quantid da peça vendida
-
 6. mostrar relatorio de vendas
 listar todas vendas efetuadas:
 para cada venda efetuada mostrar,
