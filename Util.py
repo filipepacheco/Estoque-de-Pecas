@@ -33,4 +33,4 @@ def is_float(value):
 
 
 def is_int(val):
-    return val != "" and val.lstrip("-+").isdigit()
+    return type(val) == int or (val != "" and val.lstrip("-+").isdigit())

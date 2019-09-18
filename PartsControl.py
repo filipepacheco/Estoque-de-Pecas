@@ -198,18 +198,32 @@ class PartsControl:
 
             index = index[0]
             self.parts[index].print()
-            newAmount = input("How much you want to sell? ")
-            self.editPart(index, "amount", self.parts[index].amount - newAmount)
+            sellAmount = int(input("How much you want to sell? "))
+            self.editPart(index, "amount", int(self.parts[index].amount) - sellAmount)
         except (AssertionError, ValueError, AttributeError) as Error:
             print("UNABLE TO SELL NEW PART.\nERROR:", Error)
         else:
             print("PART SUCCESSFULLY SOLD!")
-            self.sellings.append(Sell(self.parts[index].id, self.parts[index].price, newAmount))
-            self.parts[index].print()
+            self.sellings.append(Sell(self, index, sellAmount))
+            print(self.sellings)
 
+    """
+    6. mostrar relatorio de vendas
+    listar todas vendas efetuadas:
+    para cada venda efetuada mostrar,
+        codigo e nome da peça vendida
+        quantidade vendida daquela peça
+        valor desta venda
+        mostrar valor total (somatório) das vendas    
+    """
+    def report(self):
+        totalSellings = 0
+        for sell in self.sellings:
+            totalSellings += sell.price
+            sell.print()
 
-        # def report(self):
-    #
+        print("Total: $ ", totalSellings)
+
     # def export(self):
     #
     # def upload(self):
