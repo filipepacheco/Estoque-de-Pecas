@@ -3,6 +3,7 @@ from Part import Part
 from Util import clearConsole
 from copy import copy
 from Sell import Sell
+from pickle import dump, load
 
 
 class PartsControl:
@@ -13,7 +14,7 @@ class PartsControl:
         self.sellings = []
         for part in parts:
             self.partsIds.append(part.id)
-            self.partsNames.append(part.name)
+            self.partsNames.append(part.name.lower())
 
     """
         1. mostrar todas as pecas cadastradas ou 
@@ -23,7 +24,7 @@ class PartsControl:
     """
 
     def listParts(self):
-        print("1 - List all")
+        print("1 - List all ")
         print("2 - Filter by numeric field")
         print("0 - Return to menu")
         option = int(input("Choose and option: "))
@@ -36,8 +37,9 @@ class PartsControl:
         arg2 = ""
         if option != 1:
             print("Filter by...\n- id\n- category\n- price\n- amount")
-            condition = input("\nType a condition: ")
+            condition = input("\nType the name of the condition: ")
             if condition != "":
+                print("If you input two arguments, then you'll make a search by range (between 1st and 2nd arguments)")
                 arg1 = input("First Argument: ")
                 if arg1 != "":
                     arg2 = input("Second Argument (OPTIONAL): ")
@@ -222,9 +224,28 @@ class PartsControl:
             totalSellings += sell.price
             sell.print()
 
-        print("Total: $ ", totalSellings)
+        if totalSellings == 0:
+            print("No sale has been made yet!")
+        else:
+            print("Total: $ ", totalSellings)
 
-    # def export(self):
-    #
-    # def upload(self):
+    """
+    7. armazenar (salvar/gravar) cadastro em um arquivo
+    """
+    def export(self):
+        with open('partscontrol.bin', 'wb') as pcfile:
+            dump(self, pcfile)
+            print("Parts and Sellings successfully saved to file partscontrol.bin!")
+
+    """
+    8. carregar (ler) um cadastro a partir de um arquivo 
+    """
+    def importParts(self):
+        with open('partscontrol.bin', 'rb') as pcfile:
+            fileParts = load(pcfile)
+            self.parts = fileParts.parts
+            self.partsIds = fileParts.partsIds
+            self.partsNames = fileParts.partsNames
+            self.sellings = fileParts.sellings
+            print("Parts and Sellings successfully loaded from file partscontrol.bin!")
 

@@ -17,11 +17,13 @@ def menu(option, parts):
     elif option == 7:
         parts.export()
     elif option == 8:
-        parts.upload()
+        parts.importParts()
+    else:
+        print("Invalid option.")
 
 
 def clearConsole():
-    print('\n' * 180)
+    print('\n' * 10)
 
 
 def is_float(value):
