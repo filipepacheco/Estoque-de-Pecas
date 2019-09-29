@@ -5,6 +5,17 @@ from copy import copy
 from Sell import Sell
 from pickle import dump, load
 
+"""
+Classe PartsControl
+
+Propriedades:
+PARTS (list) - Lista de Part, contendo todas as partes cadastradas
+PARTSIDS (list) - Lista de INT, contendo todos os IDS das partes para facilitar controle de IDS repetidas
+PARTSNAMES (list) - Lista de STR, contendo todos os NAMES das partes para facilitar controle de NAMES repetidas
+SELLINGS (list) - Lista de Sell, contendo todas as vendas feitas.
+    
+"""
+
 
 class PartsControl:
     def __init__(self, parts=[]):
@@ -17,10 +28,23 @@ class PartsControl:
             self.partsNames.append(part.name.lower())
 
     """
-        1. mostrar todas as pecas cadastradas ou 
-        2. mostrar a partir de filtro em campo numérico
-            para isto, escolher qual campo numérico (preço por ex.) e definir em seguida os limites inferior e superior. 
-            Ex.: mostrar todas peças com preço >= a 45.50 e preço <= a 90.00
+        DESCRIÇÃO:
+            1. mostrar todas as pecas cadastradas ou 
+            2. mostrar a partir de filtro em campo numérico
+                para isto, escolher qual campo numérico (preço por ex.) e definir em seguida os limites inferior e 
+                superior. 
+                Ex.: mostrar todas peças com preço >= a 45.50 e preço <= a 90.00
+                
+        FUNCIONALIDADE:
+            1. o usuário escolhe listar todas as peças 
+                1.1. loop em todas as peças, imprimindo uma por uma
+            2. o usuário escolhe filtrar as peças cadastradas
+                2.1. o usuário manualmente digita um argumento que corresponde ao nome da propriedade da classe Sell
+                    (id, category, price ou amount)
+                    2.1.1. o usuário fornece um número como argumento
+                        2.1.1.1. 
+                    2.1.2. o usuário fornece dois números como argumento
+                
     """
 
     def listParts(self):

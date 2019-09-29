@@ -1,6 +1,21 @@
 
+"""
+Classe Sell
+Utilizada para representar uma Venda.
+
+Propriedades:
+IDPART (int) - ID da parte vendida
+NAME (str) - Nome da parte vendida, para fins de facilidade no relatório
+AMOUNT (int) - Quantidade vendida
+PRICE (float) - Preço da venda, calculado a partir da quantidade vendida * preço da preça
+"""
+
+
 class Sell:
 
+    """
+        Construtor Sell
+    """
     def __init__(self, control, partIndex, amount):
         part = control.parts[partIndex]
         self.idPart = part.id
@@ -8,6 +23,9 @@ class Sell:
         self.amount = amount
         self.price = int(amount) * float(part.price)
 
+    """
+        Impressão da venda.
+    """
     def print(self):
         print("-".center(42, '-'))
 
@@ -28,9 +46,3 @@ class Sell:
         print(("$ "+str(self.price)).center(20, ' '), end='|\n')
         print("-".center(42, '-'))
 
-        # print("-------------------------------")
-        # print("| ID PART: \t\t\t|\t", self.idPart, "\t\t|")
-        # print("| NAME PART: \t\t\t|\t", self.namePart, "\t\t|")
-        # print("| AMOUNT: \t|\t", self.amount, "\t\t|")
-        # print("| PRICE: \t\t|\t$", self.price, "\t|")
-        # print("-------------------------------")
