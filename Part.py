@@ -1,7 +1,7 @@
-from Util import is_int, is_float
+
 """
 Classe Peça
-Utilizada para representar uma peça.
+Utilizada para representar uma Peça.
 
 Propriedades:
 ID (int) - unique
@@ -10,6 +10,8 @@ CATEGORY (int) - between 1-20
 PRICE (float) - price > 0
 AMOUNT (int) - amount > 0
 """
+
+from Util import is_int, is_float
 
 
 class Part:

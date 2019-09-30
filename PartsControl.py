@@ -36,17 +36,16 @@ class PartsControl:
                 Ex.: mostrar todas peças com preço >= a 45.50 e preço <= a 90.00
                 
         FUNCIONALIDADE:
-            1. o usuário escolhe listar todas as peças 
-                1.1. loop em todas as peças, imprimindo uma por uma
-            2. o usuário escolhe filtrar as peças cadastradas
-                2.1. o usuário manualmente digita um argumento que corresponde ao nome da propriedade da classe Sell
-                    (id, category, price ou amount)
-                    2.1.1. o usuário fornece um número como argumento
-                        2.1.1.1. 
-                    2.1.2. o usuário fornece dois números como argumento
-                
+            SE o usuário escolhe listar todas as peças 
+                ENTAO loop em todas as peças, imprimindo uma por uma
+            SENAO o usuário escolhe filtrar as peças cadastradas
+                ENTAO o usuário manualmente digita um argumento que corresponde ao nome da propriedade da classe Sell
+                (id, category, price ou amount)
+                    SE o usuário fornece apenas um número como argumento
+                        ENTAO busca a peça cuja propriedade se encaixa no argumento
+                    SENAO o usuário fornece dois números como argumentos
+                        ENTAO busca a peça cuja propriedade se encaixa entre os dois argumentos recebidos
     """
-
     def listParts(self):
         print("1 - List all ")
         print("2 - Filter by numeric field")
@@ -76,6 +75,12 @@ class PartsControl:
             for part in parts:
                 part.print()
 
+    """
+        Retorna uma lista de partes que correspondem aos respectivos argumentos.
+        condition = nome da propriedade que sera testada (se nao recebido nenhuma condition, retorna todas as peças)
+        arg1 = valor a ser procurado
+        arg2 = se recebido, transforma a busca em uma busca por range entre arg1 e arg2
+    """
     def getPartsByCondtion(self, condition="", arg1="", arg2=""):
         parts = []
 
@@ -96,6 +101,11 @@ class PartsControl:
                         parts.append(part)
         return parts
 
+    """
+        Retorna uma lista de indices das partes que correspondem a condicao e argumento recebidos
+        condition = nome da propriedade a ser testada
+        arg = valor da propriedade em condition
+    """
     def getPartIndexes(self, condition, arg):
         indexes = []
 
@@ -110,9 +120,10 @@ class PartsControl:
         return indexes
 
     """
-        2. inserir nova peça no cadastro
-        obs.: deve verificar se já não há peça cadastrada com mesmo código e/ou nome; se já houver, 
-        gera mensagem de erro e não insere esta peça.
+        Registra uma nova peça.
+        Recebe todas as propriedades a partir do usuario e cria uma nova instancia de Part.
+        Testa a Part e trata asserts.
+        Caso a Part tenha sido criada com sucesso, popula a lista de partes, a lista de ids e lista de nomes.
     """
     def register(self):
         try:
@@ -132,20 +143,19 @@ class PartsControl:
             print("PART SUCCESSFULLY REGISTERED.")
 
     """
-        3. remover peça 
-        nesta opção primeira ação é o usuário escolher o critério de remoção:
-        pelo código
-        pelo nome
-        pela categoria (remove todas peças desta categoria)
+        Remover peças.
+        Para remover uma peça, é solicitado ao usuario que escolha um filtro.
+        O usuario escreve o nome da propriedade e o valor dela, para filtrar na lista de Parts.
+        A Part é encontrada e removida da lista de partes bom como seu nome e seu ID é removido das 
+        respectivas listas auxiliares.
     """
-
     def remove(self):
         try:
-            print("Remove by...\n- id\n- name\n- category\n(Enter 0 to exit)")
+            print("Remove by condition...\n- id\n- name\n- category\n(Enter 0 to exit)")
             condition = input("\nType a condition: ")
             if condition == '0':
                 return True
-            arg = input("First Argument: ")
+            arg = input("Argument: ")
 
             indexes = self.getPartIndexes(condition, arg)
 
@@ -160,15 +170,14 @@ class PartsControl:
             print("PART SUCCESSFULLY DELETED.")
 
     """
-    4. editar peça
-    escolher o critério de seleção:
-      pelo código
-      pelo nome
-    deve permitir a modificação (atualização) dos campos deste item
+        O usuário primeiro escolhe a condicao para filtrar a peça a ser editado.
+        Após, a peça encontrada é impressa na tela.
+        Então ele entra em modo de ediçnao e é solicitado ao usuário qual propriedade da Part será editada e seu 
+        novo valor.
     """
     def edit(self):
         try:
-            print("Edit by...\n- id\n- name")
+            print("Edit by condition...\n- id\n- name")
             condition = input("\nType a condition (Enter 0 to exit): ")
             if condition == '0':
                 return True
@@ -195,6 +204,11 @@ class PartsControl:
         else:
             print("PART SUCCESSFULLY EDITED.")
 
+    """
+        Edita uma Part.
+        Recebe o indice da Part, a propriedade a ser alterada e o novo valor dela.
+        Após a edição, a Part é validada e realiza os asserts necessários.
+    """
     def editPart(self, index, prop, newValue):
         newPart = copy(self.parts[index])
         setattr(newPart, prop, newValue)
@@ -207,14 +221,12 @@ class PartsControl:
         self.partsIds[index] = newPart.id
 
     """
-    5. vender peça
-    identificar a peça (pelo código ou nome)
-    solicitar pelo teclado a quantidade vendida (não permitir estoque negativo)
-    atualizar campo quantid da peça vendida
+        O usuário filtra uma peça por alguma condição e define quantas unidades desta peça serão vendidas.
+        Após o usuário informar a quantidade de vendas, uma nova instância de Sell é criada e append na lista de vendas.
     """
     def sell(self):
         try:
-            print("Sell by...\n- id\n- name")
+            print("Sell by condition...\n- id\n- name")
             condition = input("\nType a condition (Enter 0 to exit): ")
             if condition == '0':
                 return True
@@ -231,16 +243,9 @@ class PartsControl:
         else:
             print("PART SUCCESSFULLY SOLD!")
             self.sellings.append(Sell(self, index, sellAmount))
-            print(self.sellings)
 
     """
-    6. mostrar relatorio de vendas
-    listar todas vendas efetuadas:
-    para cada venda efetuada mostrar,
-        codigo e nome da peça vendida
-        quantidade vendida daquela peça
-        valor desta venda
-        mostrar valor total (somatório) das vendas    
+        Imprime um relatório de todas as vendas, com os detalhes da Part vendida, o valor vendido e o total de vendas. 
     """
     def report(self):
         totalSellings = 0
@@ -254,7 +259,7 @@ class PartsControl:
             print("Total: $ ", totalSellings)
 
     """
-    7. armazenar (salvar/gravar) cadastro em um arquivo
+        Salva toda a instância atual da classe PartsControl no arquivo partscontrol.bin
     """
     def export(self):
         with open('partscontrol.bin', 'wb') as pcfile:
@@ -262,7 +267,7 @@ class PartsControl:
             print("Parts and Sellings successfully saved to file partscontrol.bin!")
 
     """
-    8. carregar (ler) um cadastro a partir de um arquivo 
+        Carrega todo o conteudo de partscontrol.bin para uma nova instancia da classe PartsControl.
     """
     def importParts(self):
         with open('partscontrol.bin', 'rb') as pcfile:

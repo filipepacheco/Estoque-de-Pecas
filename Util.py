@@ -1,4 +1,9 @@
 
+"""
+    Função auxiliar que imprime e redireciona o menu principal.
+"""
+
+
 def menu(option, parts):
     clearConsole()
 
@@ -26,12 +31,22 @@ def clearConsole():
     print('\n' * 10)
 
 
+"""
+    Função auxiliar para controle de tipagem de variaveis do tipo FLOAT
+"""
+
+
 def is_float(value):
     try:
         float(value)
         return True
     except ValueError:
         return False
+
+
+"""
+    Função auxiliar para controle de tipagem de variaveis do tipo INT
+"""
 
 
 def is_int(val):
